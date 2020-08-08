@@ -25,6 +25,7 @@ if __name__ == "__main__":
 
     # prepare file name
     logging_file_name = str(logging_time).replace(":", "_")
+    logging_file_name = str(logging_time).replace(" ", "_")
     logging_file_name = "obd_log_" + logging_file_name[:19]
 
     # open file
