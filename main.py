@@ -17,7 +17,11 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         logging_duration = sys.argv[1]
     else:
-        logging_duration = 1200
+        logging_duration = 120
+
+    print "####################################"
+    print "OBD DATALOGGER - connecting..."
+    print "####################################"
 
     # open instances
     obd_logger = obd.OBD()
@@ -25,7 +29,6 @@ if __name__ == "__main__":
 
     # prepare file name
     logging_file_name = str(logging_time).replace(":", "_")
-    logging_file_name = str(logging_time).replace(" ", "_")
     logging_file_name = "obd_log_" + logging_file_name[:19]
 
     # open file
@@ -33,7 +36,7 @@ if __name__ == "__main__":
 
     # connect to ECU
     while obd_logger.status() != OBDStatus.CAR_CONNECTED:
-        sleep(10)
+        sleep(5)
         obd_logger = obd.OBD()
         sys.stdout.flush()
 
@@ -43,11 +46,12 @@ if __name__ == "__main__":
         print x,
     print ""
     print "####################################"
-    print "Logging duration: " + str(logging_duration) + " s"
+    print "Logging " + str(logging_duration) + " values"
     raw_input("Press Enter to start...")
     sys.stdout.flush()
+    print "Logging started..."
 
-    logging_duration = int(logging_duration) * 10
+    logging_duration = int(logging_duration)
     for cnt in range(logging_duration):
         # get rpm, engine load
         # timing, throttle pos
@@ -62,7 +66,10 @@ if __name__ == "__main__":
 
         # add linefeed
         values.append("\n")
-        sleep(0.1)
+
+        # show process
+        if cnt % 10 == 0:
+            print cnt
 
     # write values to file
     for item in values:
